@@ -16,44 +16,44 @@ public struct UserAccessToken: Codable {
         case userId = "user_id"
     }
   
-    var token: String
+    public var token: String
 
-    var userId: Int
+    public var userId: Int
 }
 
 public struct User: Codable {
   
-    var id: String
+    public var id: String
 
-    var username: String
+    public var username: String
 }
 
 public struct Feed: Codable {
   
-    var data: [MediaData]
+    public var data: [MediaData]
     
-    var paging: PagingData
+    public var paging: PagingData
 }
 
 public struct MediaData: Codable {
   
-    var id: String
+    public var id: String
     
-    var caption: String?
+    public var caption: String?
 }
 
 public struct PagingData: Codable {
   
-    var cursors: CursorData
+    public var cursors: CursorData
     
-    var next: String
+    public var next: String
 }
 
 public struct CursorData: Codable {
   
-    var before: String
+    public var before: String
     
-    var after: String
+    public var after: String
 }
 
 public enum MediaType: String, Codable {
@@ -82,15 +82,15 @@ public struct Media: Codable {
         case timestamp
     }
   
-    var id: String
+    public var id: String
     
-    var mediaType: MediaType
+    public var mediaType: MediaType
     
-    var mediaUrl: String
+    public var mediaUrl: String
     
-    var thumbnailUrl: String?
+    public var thumbnailUrl: String?
     
-    var username: String
+    public var username: String
     
-    var timestamp: String
+    public var timestamp: String
 }
