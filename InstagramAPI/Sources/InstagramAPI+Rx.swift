@@ -10,7 +10,7 @@ import RxSwift
 
 extension InstagramAPI {
     
-    func authorize(from viewController: UIViewController) -> Observable<Void> {
+    public func authorize(from viewController: UIViewController) -> Observable<Void> {
         return .create { [weak self] observer -> Disposable in
             self?.authorize(from: viewController) { result in
                 if result {
@@ -24,7 +24,7 @@ extension InstagramAPI {
         }
     }
     
-    func instagramUser() -> Observable<User> {
+    public func user() -> Observable<User> {
         return .create { [weak self] observer -> Disposable in
             self?.user(completion: { result in
                 switch result {
@@ -39,7 +39,7 @@ extension InstagramAPI {
         }
     }
     
-    func feed() -> Observable<Feed> {
+    public func feed() -> Observable<Feed> {
         return .create { [weak self] observer -> Disposable in
             self?.feed(completion: { result in
                 switch result {
@@ -54,7 +54,7 @@ extension InstagramAPI {
         }
     }
     
-    func media(for mediaData: MediaData) -> Observable<Media> {
+    public func media(for mediaData: MediaData) -> Observable<Media> {
         return .create { [weak self] observer -> Disposable in
             self?.media(for: mediaData, completion: { result in
             switch result {
