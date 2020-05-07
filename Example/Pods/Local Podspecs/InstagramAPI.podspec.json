@@ -1,0 +1,22 @@
+{
+  "name": "InstagramAPI",
+  "version": "0.1.0",
+  "summary": "A short description of InstagramAPI.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/anovoselskyi/InstagramAPI",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "anovoselskyi": "anovoselskyi@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/anovoselskyi/InstagramAPI.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "InstagramAPI/Classes/**/*"
+}

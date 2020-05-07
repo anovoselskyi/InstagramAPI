@@ -1,0 +1,6 @@
+framework module InstagramAPI {
+  umbrella header "InstagramAPI-umbrella.h"
+
+  export *
+  module * { export * }
+}
