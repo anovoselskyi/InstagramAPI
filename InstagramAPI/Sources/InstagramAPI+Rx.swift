@@ -26,7 +26,7 @@ extension InstagramAPI {
     
     func instagramUser() -> Observable<User> {
         return .create { [weak self] observer -> Disposable in
-            self?.instagramUser(completion: { result in
+            self?.user(completion: { result in
                 switch result {
                 case .success(let user):
                     observer.onNext(user)

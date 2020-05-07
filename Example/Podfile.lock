@@ -4,7 +4,8 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - InstagramAPI (0.1.0)
+  - InstagramAPI (0.1.0):
+    - RxSwift
   - Nimble (7.3.4)
   - Nimble-Snapshots (6.3.0):
     - Nimble-Snapshots/Core (= 6.3.0)
@@ -12,6 +13,7 @@ PODS:
     - FBSnapshotTestCase (~> 2.0)
     - Nimble (~> 7.0)
   - Quick (1.2.0)
+  - RxSwift (5.1.1)
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
@@ -19,6 +21,7 @@ DEPENDENCIES:
   - Nimble (~> 7.0)
   - Nimble-Snapshots (~> 6.3.0)
   - Quick (~> 1.2.0)
+  - RxSwift
 
 SPEC REPOS:
   trunk:
@@ -26,6 +29,7 @@ SPEC REPOS:
     - Nimble
     - Nimble-Snapshots
     - Quick
+    - RxSwift
 
 EXTERNAL SOURCES:
   InstagramAPI:
@@ -33,11 +37,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  InstagramAPI: b14b78a9226386403c66f7d2d65e0a1f85fb1d63
+  InstagramAPI: ec81f0c22dee2e2ede6187749201b247cef38cc8
   Nimble: 051e3d8912d40138fa5591c78594f95fb172af37
   Nimble-Snapshots: f5459b5b091678dc942d03ec4741cacb58ba4a52
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
 
-PODFILE CHECKSUM: e74d4bbb49f9eec83f114f8d4f02a1ba6b9be02b
+PODFILE CHECKSUM: a17e0858ad55301644fac18a91c31c1f5f075315
 
 COCOAPODS: 1.9.0
