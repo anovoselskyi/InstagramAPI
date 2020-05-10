@@ -28,12 +28,6 @@ class InstagramAuthorizeViewController: UIViewController, WKNavigationDelegate {
         
         setupWebView()
     }
-    
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        
-        setupWebView()
-    }
 }
 
 extension InstagramAuthorizeViewController {
@@ -45,28 +39,12 @@ extension InstagramAuthorizeViewController {
           NSLayoutConstraint.deactivate(constraints)
           constraints.removeAll()
         }
-        
-        let views = ["webView" : webView]
-        let metrics = [
-            "topMargin" : view.safeAreaInsets.top,
-            "bottomMargin" : view.safeAreaInsets.bottom,
-            "leftMargin" : view.safeAreaInsets.left,
-            "rightMargin" : view.safeAreaInsets.right
-        ]
-        
-        constraints += NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-topMargin-[webView]-bottomMargin-|",
-            metrics: metrics,
-            views: views
-        )
-        
-        constraints += NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-leftMargin-[webView]-rightMargin-|",
-            metrics: metrics,
-            views: views
-        )
-        
-        NSLayoutConstraint.activate(constraints)
+                
+        webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        webView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
 }
 extension InstagramAuthorizeViewController {

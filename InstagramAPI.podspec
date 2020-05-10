@@ -28,7 +28,7 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/anovoselskyi/InstagramAPI.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/anovoselskyi'
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '9.0'
 
   s.swift_versions = '5.1'
 

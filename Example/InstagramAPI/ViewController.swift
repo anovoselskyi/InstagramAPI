@@ -7,18 +7,26 @@
 //
 
 import UIKit
+import InstagramAPI
+import RxSwift
 
 class ViewController: UIViewController {
+    
+    var instagramAPI: InstagramAPI = .init(appId: "", appSecret: "", redirectUri: "")
+    
+    var disposeBag: DisposeBag = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        instagramAPI.authorize(from: self)
+            .subscribe()
+            .disposed(by: disposeBag)
     }
-
 }
 
