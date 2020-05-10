@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  InstagramAPI is a SDK written on Swift over new Instagram Graph API and Instagram Basic Display API. The Instagram Legacy API Platform will disable at June 29, 2020
                        DESC
 
   s.homepage         = 'https://github.com/anovoselskyi/InstagramAPI'
