@@ -24,13 +24,13 @@ TODO: Add long description of the pod here.
   s.homepage         = 'https://github.com/anovoselskyi/InstagramAPI'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'anovoselskyi' => 'anovoselskyi@gmail.com' }
+  s.author           = { 'Andrii Novoselskyi' => 'anovoselskyi@gmail.com' }
   s.source           = { :git => 'https://github.com/anovoselskyi/InstagramAPI.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.social_media_url = 'https://twitter.com/anovoselskyi'
 
   s.ios.deployment_target = '11.0'
 
-  s.swift_versions = '5.0'
+  s.swift_versions = '5.1'
 
   s.source_files = 'InstagramAPI/Sources/**/*'
   
