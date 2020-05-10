@@ -11,7 +11,7 @@ class InstagramAuthorizeViewController: UIViewController, WKNavigationDelegate {
     
     var instagramAPI: InstagramAPI?
     
-    var completion: ((Result<UserAccessToken, Error>) -> Void)?
+    private var completion: ((Result<UserAccessToken, Error>) -> Void)?
     
     private var constraints: [NSLayoutConstraint] = []
     
