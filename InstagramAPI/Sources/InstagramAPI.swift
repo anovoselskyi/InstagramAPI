@@ -68,21 +68,21 @@ public class InstagramAPI {
 
 extension InstagramAPI {
     
-    public func authorize(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func authorize(from viewController: UIViewController, completion: @escaping (Error?) -> Void) {
         let authorizeViewController = InstagramAuthorizeViewController()
         authorizeViewController.instagramAPI = self
         authorizeViewController.authorize { result in
-            switch result {
-            case .success(let userAccessToken):
-                self.userAccessToken = userAccessToken
-                completion(true)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-                completion(false)
-            }
-            
             DispatchQueue.main.async {
-                viewController.dismiss(animated: true, completion: nil)
+                viewController.dismiss(animated: true) {
+                    switch result {
+                    case .success(let userAccessToken):
+                        self.userAccessToken = userAccessToken
+                        completion(nil)
+                    case .failure(let error):
+                        assertionFailure(error.localizedDescription)
+                        completion(error)
+                    }
+                }
             }
         }
         viewController.present(authorizeViewController, animated:true)

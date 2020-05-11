@@ -69,7 +69,7 @@ extension ViewController {
         if auth == .default {
             instagramAPI.authorize(from: self) { [weak self] result in
                 DispatchQueue.main.async {
-                    if result {
+                    if result == nil {
                         self?.loadMedia()
                         self?.showSuccess()
                     } else {
