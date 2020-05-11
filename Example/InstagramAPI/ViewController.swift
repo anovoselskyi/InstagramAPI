@@ -25,15 +25,10 @@ enum InstagramError: String, Error {
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    enum Style: String, CaseIterable {
-        case imperative = "Imperative"
-        case reactive = "Reactive"
-    }
-    
-    enum Auth {
-        case `default`
-        case custom
+        
+    enum Auth: String, CaseIterable {
+        case `default` = "Default auth"
+        case custom = "Custom auth"
     }
         
     var instagramAPI: InstagramAPI = .init(appId: "", appSecret: "", redirectUri: "")
@@ -48,7 +43,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        Observable.from(optional: Style.allCases)
+        Observable.from(optional: Auth.allCases)
             .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: UITableViewCell.self)) { row, item, cell in
                 cell.textLabel?.text = item.rawValue
             }
@@ -60,49 +55,18 @@ class ViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        tableView.rx.modelSelected(Style.self)
+        tableView.rx.modelSelected(Auth.self)
             .subscribe(onNext: { [weak self] style in
-                self?.showActionSheet(with: style)
+                self?.authenticate(with: style)
             })
             .disposed(by: disposeBag)
-    }
-    
-    func showActionSheet(with style: Style) {
-        let actionSheet = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Default authentication", style: .default) { _ in
-            self.defaultAuth(with: style)
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Custom authentication", style: .default) { _ in
-            self.customAuth(with: style)
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .destructive) { _ in
-            actionSheet.dismiss(animated: true, completion: nil)
-        })
-        
-        present(actionSheet, animated: true, completion: nil)
     }
 }
 
 extension ViewController {
     
-    func defaultAuth(with style: Style) {
-        if style == .reactive {
-            instagramAPI.authorize(from: self)
-                .flatMap { [unowned self] in self.instagramAPI.feed() }
-                .subscribe(onNext: { [weak self] feed in
-                    DispatchQueue.main.async {
-                        self?.loadMedia(for: feed)
-                        self?.showSuccess()
-                    }
-                }, onError: { error in
-                    DispatchQueue.main.async {
-                        self.showError(error)
-                    }
-                })
-                .disposed(by: disposeBag)
-        } else {
+    func authenticate(with auth: Auth) {
+        if auth == .default {
             instagramAPI.authorize(from: self) { [weak self] result in
                 DispatchQueue.main.async {
                     if result {
@@ -113,25 +77,9 @@ extension ViewController {
                     }
                 }
             }
-        }
-    }
-    
-    func customAuth(with style: Style) {
-        let authViewController = AuthorizeViewController()
-        authViewController.instagramAPI = instagramAPI
-        if style == .reactive {
-            authViewController.authorize()
-                .subscribe(onNext: { _ in
-                    self.loadMedia()
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: nil)
-                        self.showSuccess()
-                    }
-                }, onError: { error in
-                    self.showError(error)
-                })
-            .disposed(by: disposeBag)
         } else {
+            let authViewController = AuthorizeViewController()
+            authViewController.instagramAPI = instagramAPI
             authViewController.authorize { result in
                 switch result {
                 case .success(_):
@@ -147,8 +95,8 @@ extension ViewController {
                     }
                 }
             }
+            present(authViewController, animated: true, completion: nil)
         }
-        present(authViewController, animated: true, completion: nil)
     }
 }
 

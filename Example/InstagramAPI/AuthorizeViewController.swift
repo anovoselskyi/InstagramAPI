@@ -8,16 +8,13 @@
 
 import WebKit
 import InstagramAPI
-import RxSwift
 
 class AuthorizeViewController: UIViewController, WKNavigationDelegate {
     
     var instagramAPI: InstagramAPI?
     
     private var completion: ((Result<UserAccessToken, Error>) -> Void)?
-    
-    private let didComplete = PublishSubject<UserAccessToken>()
-    
+        
     private var constraints: [NSLayoutConstraint] = []
     
     lazy var webView: WKWebView = {
@@ -64,35 +61,13 @@ extension AuthorizeViewController {
             }
         }
     }
-    
-    func authorize() -> Observable<UserAccessToken> {
-        instagramAPI?.authorize { [weak self] result in
-            if case .success(let url) = result {
-                DispatchQueue.main.async {
-                    self?.webView.load(URLRequest(url: url))
-                }
-            }
-        }
-        
-        return didComplete.asObservable()
-    }
 }
 
 extension AuthorizeViewController {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if let url = navigationAction.request.url {
-            instagramAPI?.exchangeCodeForToken(from: url) { [weak self] result in
-                self?.completion?(result)
-                
-                switch result {
-                case .success(let token):
-                    self?.didComplete.onNext(token)
-                    self?.didComplete.onCompleted()
-                case .failure(let error):
-                    self?.didComplete.onError(error)
-                }
-            }
+        if let url = navigationAction.request.url, let completion = completion {
+            instagramAPI?.exchangeCodeForToken(from: url, completion: completion)
         }
         decisionHandler(WKNavigationActionPolicy.allow)
     }
