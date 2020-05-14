@@ -85,7 +85,7 @@ extension InstagramAPI {
                 }
             }
         }
-        viewController.present(authorizeViewController, animated:true)
+        viewController.present(UINavigationController(rootViewController: authorizeViewController), animated:true)
     }
     
     public func authorize(completion: @escaping (Result<URL, Error>) -> Void ) {

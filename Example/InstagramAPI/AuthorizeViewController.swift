@@ -14,9 +14,7 @@ class AuthorizeViewController: UIViewController, WKNavigationDelegate {
     var instagramAPI: InstagramAPI?
     
     private var completion: ((Result<UserAccessToken, Error>) -> Void)?
-        
-    private var constraints: [NSLayoutConstraint] = []
-    
+            
     lazy var webView: WKWebView = {
         let _webView = WKWebView()
         _webView.navigationDelegate = self
@@ -28,20 +26,22 @@ class AuthorizeViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupNavigationBar()
         setupWebView()
     }
 }
 
 extension AuthorizeViewController {
     
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelAction(sender:)))
+    }
+    
     private func setupWebView() {
         webView.translatesAutoresizingMaskIntoConstraints = false
         
-        if !constraints.isEmpty {
-          NSLayoutConstraint.deactivate(constraints)
-          constraints.removeAll()
-        }
-                
+        navigationController?.navigationBar.isTranslucent = false
+
         webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -70,5 +70,12 @@ extension AuthorizeViewController {
             instagramAPI?.exchangeCodeForToken(from: url, completion: completion)
         }
         decisionHandler(WKNavigationActionPolicy.allow)
+    }
+}
+
+extension AuthorizeViewController {
+    
+    @objc private func cancelAction(sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
     }
 }

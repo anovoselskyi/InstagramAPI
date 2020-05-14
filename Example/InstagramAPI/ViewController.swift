@@ -38,11 +38,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         Observable.from(optional: Auth.allCases)
             .bind(to: tableView.rx.items(cellIdentifier: "Cell", cellType: UITableViewCell.self)) { row, item, cell in
                 cell.textLabel?.text = item.rawValue
@@ -95,7 +90,7 @@ extension ViewController {
                     }
                 }
             }
-            present(authViewController, animated: true, completion: nil)
+            present(UINavigationController(rootViewController: authViewController), animated: true, completion: nil)
         }
     }
 }
