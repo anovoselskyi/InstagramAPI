@@ -35,6 +35,7 @@ public class InstagramAPI {
         case authorize = "/oauth/authorize"
         case accessToken = "/oauth/access_token"
         case media = "/media"
+        case children = "/children"
     }
     
     // MARK: - Public Instance Members
@@ -309,6 +310,48 @@ extension InstagramAPI {
         })
         task.resume()
     }
+    
+    public func children(for mediaData: MediaData, completion: @escaping (Result<Children, Error>) -> Void) {
+        guard let userAccessToken = userAccessToken else {
+            completion(.failure(InstagramError.generic))
+            return
+        }
+        
+        var urlComponents = URLComponents(scheme: SchemeURL.https.rawValue, host: HostURL.graphApi.rawValue, path: "/\(mediaData.id)\(Path.children.rawValue)")
+        urlComponents.queryItems = [
+            URLQueryItem(name: "fields", value: "id,media_type,media_url,thumbnail_url,username,timestamp"),
+            URLQueryItem(name: "access_token", value: userAccessToken.token)
+        ]
+        
+        guard let requestUrl = urlComponents.url else {
+            assertionFailure()
+            completion(.failure(InstagramError.generic))
+            return
+        }
+        
+        let request = URLRequest(url: requestUrl)
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(.failure(error))
+                } else if let data = data {
+                    do {
+                        let children = try JSONDecoder().decode(Children.self, from: data)
+                        completion(.success(children))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                } else {
+                    assertionFailure("Unreachable code")
+                    completion(.failure(InstagramError.generic))
+                }
+            }
+        })
+        task.resume()
+    }
+
 }
 
 // MARK: - Private Methods

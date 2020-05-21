@@ -42,6 +42,13 @@ public struct MediaData: Codable {
     public var caption: String?
 }
 
+public struct Children: Codable {
+  
+    public var data: [Media]
+    
+    public var paging: PagingData?
+}
+
 public struct PagingData: Codable {
   
     public var cursors: CursorData
