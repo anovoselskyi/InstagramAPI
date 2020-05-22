@@ -230,7 +230,7 @@ extension InstagramAPI {
         dataTask.resume()
     }
     
-    public func feed(completion: @escaping (Result<Feed, Error>) -> Void) {
+    public func feed(after feed: Feed? = nil, completion: @escaping (Result<Feed, Error>) -> Void) {
         guard let userAccessToken = userAccessToken else {
             completion(.failure(InstagramError.generic))
             return
@@ -242,6 +242,10 @@ extension InstagramAPI {
             URLQueryItem(name: "access_token", value: userAccessToken.token),
         ]
         
+        if let afterFeed = feed {
+            urlComponents.queryItems?.append(URLQueryItem(name: "after", value: afterFeed.paging.cursors.after))
+        }
+                
         guard let requestUrl = urlComponents.url else {
             assertionFailure()
             return
