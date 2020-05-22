@@ -48,7 +48,7 @@ public class InstagramAPI {
         
     private(set) var currentUser: User?
     
-    var isAuthorized: Bool {
+    public var isAuthorized: Bool {
         return userAccessToken != nil
     }
     
