@@ -53,7 +53,7 @@ public struct PagingData: Codable {
   
     public var cursors: CursorData
     
-    public var next: String
+    public var next: String?
 }
 
 public struct CursorData: Codable {
