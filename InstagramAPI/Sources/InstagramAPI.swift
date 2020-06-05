@@ -100,6 +100,7 @@ extension InstagramAPI {
         
         guard let requestUrl = urlComponents.url else {
             assertionFailure()
+            completion(.failure(InstagramError.generic))
             return
         }
         
@@ -159,6 +160,7 @@ extension InstagramAPI {
                 
         guard let requestUrl = urlComponents.url else {
             assertionFailure()
+            completion(.failure(InstagramError.generic))
             return
         }
         
@@ -204,6 +206,7 @@ extension InstagramAPI {
         
         guard let requestUrl = urlComponents.url else {
             assertionFailure()
+            completion(.failure(InstagramError.generic))
             return
         }
 
@@ -248,6 +251,7 @@ extension InstagramAPI {
                 
         guard let requestUrl = urlComponents.url else {
             assertionFailure()
+            completion(.failure(InstagramError.generic))
             return
         }
         
