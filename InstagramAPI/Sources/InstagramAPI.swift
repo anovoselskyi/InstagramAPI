@@ -170,26 +170,17 @@ extension InstagramAPI {
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = headers
         request.httpBody = postData
-        
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    assertionFailure(error.localizedDescription)
-                    completion(.failure(error))
-                } else if let data = data {
-                    do {
-                        let userAccessToken = try JSONDecoder().decode(UserAccessToken.self, from: data)
-                        self?.userAccessToken = userAccessToken
-                        completion(.success(userAccessToken))
-                    } catch {
-                        // Completion failure not handled due to url redirection
-                        print(error)
-                    }
-                }
+                
+        perform(urlRequest: request) { [weak self] (result: Result<UserAccessToken, Error>) in
+            switch result {
+            case .success(let userAccessToken):
+                self?.userAccessToken = userAccessToken
+                completion(.success(userAccessToken))
+            case .failure(let error):
+                // Completion failure not handled due to url redirection
+                print(error)
             }
-        })
-        dataTask.resume()
+        }
     }
     
     public func user(completion: @escaping (Result<User, Error>) -> Void) {
@@ -211,26 +202,16 @@ extension InstagramAPI {
         }
 
         let request = URLRequest(url: requestUrl)
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request, completionHandler: { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                } else if let data = data {
-                    do {
-                        let instagramUser = try JSONDecoder().decode(User.self, from: data)
-                        self.currentUser = instagramUser
-                        completion(.success(instagramUser))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                } else {
-                    assertionFailure("Unreachable code")
-                    completion(.failure(InstagramError.generic))
-                }
+                
+        perform(urlRequest: request) { [weak self] (result: Result<User, Error>) in
+            switch result {
+            case .success(let instagramUser):
+                self?.currentUser = instagramUser
+                completion(.success(instagramUser))
+            case .failure(let error):
+                completion(.failure(error))
             }
-        })
-        dataTask.resume()
+        }
     }
     
     public func feed(after feed: Feed? = nil, completion: @escaping (Result<Feed, Error>) -> Void) {
@@ -257,25 +238,9 @@ extension InstagramAPI {
         
         let request = URLRequest(url: requestUrl)
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                } else if let data = data {
-                    do {
-                        let feed = try JSONDecoder().decode(Feed.self, from: data)
-                        completion(.success(feed))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                } else {
-                    assertionFailure("Unreachable code")
-                    completion(.failure(InstagramError.generic))
-                }
-            }
-        })
-        task.resume()
+        perform(urlRequest: request) { result in
+            completion(result)
+        }
     }
         
     public func media(for mediaData: MediaData, completion: @escaping (Result<Media, Error>) -> Void) {
@@ -298,25 +263,9 @@ extension InstagramAPI {
 
         let request = URLRequest(url: requestUrl)
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                } else if let data = data {
-                    do {
-                        let media = try JSONDecoder().decode(Media.self, from: data)
-                        completion(.success(media))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                } else {
-                    assertionFailure("Unreachable code")
-                    completion(.failure(InstagramError.generic))
-                }
-            }
-        })
-        task.resume()
+        perform(urlRequest: request) { result in
+            completion(result)
+        }
     }
     
     public func children(for mediaData: MediaData, completion: @escaping (Result<Children, Error>) -> Void) {
@@ -339,15 +288,27 @@ extension InstagramAPI {
         
         let request = URLRequest(url: requestUrl)
         
+        perform(urlRequest: request) { result in
+            completion(result)
+        }
+    }
+
+}
+
+// MARK: - Private Methods
+
+extension InstagramAPI {
+    
+    private func perform<T: Codable>(urlRequest: URLRequest, completion: @escaping (Result<T, Error>) -> Void) {
         let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+        let task = session.dataTask(with: urlRequest, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
                     completion(.failure(error))
                 } else if let data = data {
                     do {
-                        let children = try JSONDecoder().decode(Children.self, from: data)
-                        completion(.success(children))
+                        let result = try JSONDecoder().decode(T.self, from: data)
+                        completion(.success(result))
                     } catch {
                         completion(.failure(error))
                     }
@@ -359,13 +320,7 @@ extension InstagramAPI {
         })
         task.resume()
     }
-
-}
-
-// MARK: - Private Methods
-
-extension InstagramAPI {
-            
+                
     private func makeFormBody(parameters: [[String : String]], boundary: String) -> Data {
         var body = ""
         let error: NSError? = nil
